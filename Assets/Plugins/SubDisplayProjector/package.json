@@ -1,0 +1,9 @@
+{
+  "name": "com.izugch73.subdisplayprojector",
+  "displayName": "Sub Display Projector",
+  "version": "1.0.0",
+  "unity": "2022.3",
+  "description": "Sub Display Projector",
+  "license": "MIT",
+  "dependencies": {}
+}
