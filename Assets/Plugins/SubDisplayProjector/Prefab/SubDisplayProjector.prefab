@@ -202,4 +202,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   subDisplay: {fileID: 4412139510653225844}
-  adjustMode: 1
+  adjustMode: 0

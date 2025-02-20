@@ -25,7 +25,7 @@ namespace SubDisplayProjector
             AdjustDisplaySize(displaySize);
         }
 
-        private Vector2 GetAnotherScreenResolution()
+        private static Vector2 GetAnotherScreenResolution()
         {
             if (Display.displays.Length < 2) return new Vector2(1920, 1080);
 
@@ -44,32 +44,20 @@ namespace SubDisplayProjector
 
         private void AdjustDisplaySize(Vector2 size)
         {
-            if (adjustMode == AdjustMode.HeightBasis)
-            {
-                var scale = size.y / Screen.height;
-                subDisplay.rectTransform.sizeDelta = new Vector2(Screen.width * scale, Screen.height * scale);
-            }
-            else if (adjustMode == AdjustMode.WidthBasis)
-            {
-                var scale = size.x / Screen.width;
-                subDisplay.rectTransform.sizeDelta = new Vector2(Screen.width * scale, Screen.height * scale);
-            }
-            else // AdjustMode.WholeScreen
-            {
-                var scaleWidth = size.x / Screen.width;
-                var scaleHeight = size.y / Screen.height;
+            var scaleWidth = size.x / Screen.width;
+            var scaleHeight = size.y / Screen.height;
 
-                if (scaleWidth < scaleHeight)
-                {
-                    subDisplay.rectTransform.sizeDelta =
-                        new Vector2(Screen.width * scaleWidth, Screen.height * scaleWidth);
-                }
-                else
-                {
-                    subDisplay.rectTransform.sizeDelta =
-                        new Vector2(Screen.width * scaleHeight, Screen.height * scaleHeight);
-                }
-            }
+            subDisplay.rectTransform.sizeDelta = adjustMode switch
+            {
+                AdjustMode.HeightBasis => AdjustScale(scaleHeight),
+                AdjustMode.WidthBasis => AdjustScale(scaleWidth),
+                _ => scaleWidth < scaleHeight ? AdjustScale(scaleWidth) : AdjustScale(scaleHeight)
+            };
+        }
+        
+        private static Vector2 AdjustScale(float scale)
+        {
+            return new Vector2(Screen.width * scale, Screen.height * scale);
         }
 
         private void OnGUI()
