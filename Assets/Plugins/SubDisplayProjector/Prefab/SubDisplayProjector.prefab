@@ -82,7 +82,7 @@ GameObject:
   m_Component:
   - component: {fileID: 156463642711876321}
   - component: {fileID: 745548984474493621}
-  - component: {fileID: 3621083943349931498}
+  - component: {fileID: 2016216724436944126}
   m_Layer: 5
   m_Name: SubDisplayCanvas
   m_TagString: Untagged
@@ -133,7 +133,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 1
---- !u!114 &3621083943349931498
+--- !u!114 &2016216724436944126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 1
+  m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -201,5 +201,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e86155d97964e2686fc18047236660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayHeight: 1080
   subDisplay: {fileID: 4412139510653225844}
+  adjustMode: 1
