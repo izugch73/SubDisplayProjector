@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace SubDisplayProjector
@@ -22,11 +21,11 @@ namespace SubDisplayProjector
             DontDestroyOnLoad(this);
             InitializeRenderTexture();
 
-            var displaySize = GetSecondDisplaySettings();
+            var displaySize = GetAnotherScreenResolution();
             AdjustDisplaySize(displaySize);
         }
 
-        private Vector2 GetSecondDisplaySettings()
+        private Vector2 GetAnotherScreenResolution()
         {
             if (Display.displays.Length < 2) return new Vector2(1920, 1080);
 
@@ -55,22 +54,20 @@ namespace SubDisplayProjector
                 var scale = size.x / Screen.width;
                 subDisplay.rectTransform.sizeDelta = new Vector2(Screen.width * scale, Screen.height * scale);
             }
-            else // whole basis
+            else // AdjustMode.WholeScreen
             {
                 var scaleWidth = size.x / Screen.width;
                 var scaleHeight = size.y / Screen.height;
 
                 if (scaleWidth < scaleHeight)
                 {
-                    // 幅に合わせる（WidthBasisの処理と同様）
-                    var scale = scaleWidth;
-                    subDisplay.rectTransform.sizeDelta = new Vector2(Screen.width * scale, Screen.height * scale);
+                    subDisplay.rectTransform.sizeDelta =
+                        new Vector2(Screen.width * scaleWidth, Screen.height * scaleWidth);
                 }
                 else
                 {
-                    // 高さに合わせる（HeightBasisの処理と同様）
-                    var scale = scaleHeight;
-                    subDisplay.rectTransform.sizeDelta = new Vector2(Screen.width * scale, Screen.height * scale);
+                    subDisplay.rectTransform.sizeDelta =
+                        new Vector2(Screen.width * scaleHeight, Screen.height * scaleHeight);
                 }
             }
         }
