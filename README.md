@@ -5,7 +5,6 @@ SubDisplayProject copies the content rendered in Display1 to Display2.
 2022.3.53f1
 
 # How to install
-
 Add following url to package manager:
 https://github.com/izugch73/SubDisplayProjector.git?path=Assets/Plugins/SubDisplayProjector#1.0.0
 
