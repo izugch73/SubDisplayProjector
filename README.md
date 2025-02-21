@@ -59,7 +59,7 @@ This component is designed to handle varying device resolutions and Safe Area co
 
 # Install
 Add following url to package manager:
-https://github.com/izugch73/SubDisplayProjector.git?path=Assets/Plugins/SubDisplayProjector#1.0.0
+https://github.com/izugch73/SubDisplayProjector.git?path=Assets/Plugins/SubDisplayProjector#1.2.0
 
 # License
 MIT
