@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace SubDisplayProjector
@@ -18,7 +17,7 @@ namespace SubDisplayProjector
         [SerializeField] private AdjustMode adjustMode = AdjustMode.WholeScreen;
 
         /**
-         * Safe Area Consideration
+         * Safe Area Based Adjustment
          * If true, the safe area is considered when adjusting the display size.
          */
         [SerializeField] private bool isBasedSafeArea = false;
@@ -28,6 +27,25 @@ namespace SubDisplayProjector
             DontDestroyOnLoad(this);
             InitializeRenderTexture();
 
+            Apply();
+        }
+        
+        /// <summary>
+        /// Adjust the display size.
+        /// </summary>
+        public void Apply()
+        {
+            var displaySize = GetAnotherScreenResolution();
+            AdjustDisplaySize(displaySize);
+        }
+        
+        /// <summary>
+        /// Adjust the display size based on the specified mode.
+        /// </summary>
+        public void Apply(AdjustMode adjustMode, bool isBasedSafeArea)
+        {
+            this.adjustMode = adjustMode;
+            this.isBasedSafeArea = isBasedSafeArea;
             var displaySize = GetAnotherScreenResolution();
             AdjustDisplaySize(displaySize);
         }
@@ -62,7 +80,7 @@ namespace SubDisplayProjector
                 // Calculate the offset from the center of the screen
                 var screenCenter = new Vector2(Screen.width, Screen.height) / 2f;
                 var offset = safeArea.center - screenCenter;
-                
+
                 // Calculate the scale based on the safe area
                 var scaleWidth = size.x / safeArea.width;
                 var scaleHeight = size.y / safeArea.height;
