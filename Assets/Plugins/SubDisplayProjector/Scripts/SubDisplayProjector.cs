@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace SubDisplayProjector
@@ -16,6 +17,12 @@ namespace SubDisplayProjector
          */
         [SerializeField] private AdjustMode adjustMode = AdjustMode.WholeScreen;
 
+        /**
+         * Safe Area Consideration
+         * If true, the safe area is considered when adjusting the display size.
+         */
+        [SerializeField] private bool isBasedSafeArea = false;
+
         private void Start()
         {
             DontDestroyOnLoad(this);
@@ -30,8 +37,8 @@ namespace SubDisplayProjector
             if (Display.displays.Length < 2) return new Vector2(1920, 1080);
 
             var display2 = Display.displays[1];
-            var height = display2.systemHeight;
             var width = display2.systemWidth;
+            var height = display2.systemHeight;
 
             return new Vector2(width, height);
         }
@@ -44,20 +51,46 @@ namespace SubDisplayProjector
 
         private void AdjustDisplaySize(Vector2 size)
         {
-            var scaleWidth = size.x / Screen.width;
-            var scaleHeight = size.y / Screen.height;
+            float baseWidth = Screen.width;
+            float baseHeight = Screen.height;
+            var scale = 1f;
 
-            subDisplay.rectTransform.sizeDelta = adjustMode switch
+            if (isBasedSafeArea)
             {
-                AdjustMode.HeightBasis => AdjustScale(scaleHeight),
-                AdjustMode.WidthBasis => AdjustScale(scaleWidth),
-                _ => scaleWidth < scaleHeight ? AdjustScale(scaleWidth) : AdjustScale(scaleHeight)
-            };
-        }
-        
-        private static Vector2 AdjustScale(float scale)
-        {
-            return new Vector2(Screen.width * scale, Screen.height * scale);
+                var safeArea = Screen.safeArea;
+
+                // Calculate the offset from the center of the screen
+                var screenCenter = new Vector2(Screen.width, Screen.height) / 2f;
+                var offset = safeArea.center - screenCenter;
+                
+                // Calculate the scale based on the safe area
+                var scaleWidth = size.x / safeArea.width;
+                var scaleHeight = size.y / safeArea.height;
+
+                scale = adjustMode switch
+                {
+                    AdjustMode.HeightBasis => scaleHeight,
+                    AdjustMode.WidthBasis => scaleWidth,
+                    _ => Mathf.Min(scaleWidth, scaleHeight)
+                };
+
+                subDisplay.rectTransform.anchoredPosition = -offset * scale;
+            }
+            else
+            {
+                var scaleWidth = size.x / baseWidth;
+                var scaleHeight = size.y / baseHeight;
+
+                scale = adjustMode switch
+                {
+                    AdjustMode.HeightBasis => scaleHeight,
+                    AdjustMode.WidthBasis => scaleWidth,
+                    _ => Mathf.Min(scaleWidth, scaleHeight)
+                };
+            }
+
+            var newSizeDelta = new Vector2(baseWidth * scale, baseHeight * scale);
+            subDisplay.rectTransform.sizeDelta = newSizeDelta;
         }
 
         private void OnGUI()
