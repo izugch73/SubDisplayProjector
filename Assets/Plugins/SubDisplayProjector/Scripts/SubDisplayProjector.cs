@@ -5,8 +5,19 @@ namespace SubDisplayProjector
 {
     public class SubDisplayProjector : MonoBehaviour
     {
-        [SerializeField] private RawImage subDisplay;
-        private RenderTexture _subDisplayRenderTexture;
+        private SubDisplayProjector()
+        {
+        }
+
+        private static SubDisplayProjector _instance;
+        public static SubDisplayProjector Instance
+        {
+            get
+            {
+                if (_instance == null) _instance = FindObjectOfType<SubDisplayProjector>(true);
+                return _instance;
+            }
+        }
 
         /**
          * Adjustment Modes
@@ -21,6 +32,9 @@ namespace SubDisplayProjector
          * If true, the safe area is considered when adjusting the display size.
          */
         [SerializeField] private bool isBasedSafeArea = false;
+        
+        [SerializeField] private RawImage subDisplay;
+        private RenderTexture _subDisplayRenderTexture;
 
         private void Start()
         {
@@ -29,7 +43,7 @@ namespace SubDisplayProjector
 
             Apply();
         }
-        
+
         /// <summary>
         /// Adjust the display size.
         /// </summary>
@@ -38,7 +52,7 @@ namespace SubDisplayProjector
             var displaySize = GetAnotherScreenResolution();
             AdjustDisplaySize(displaySize);
         }
-        
+
         /// <summary>
         /// Adjust the display size based on the specified mode.
         /// </summary>
