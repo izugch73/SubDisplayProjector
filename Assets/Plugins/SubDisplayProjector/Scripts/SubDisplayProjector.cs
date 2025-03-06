@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,14 +41,6 @@ namespace SubDisplayProjector
         {
             DontDestroyOnLoad(this);
             InitializeRenderTexture();
-
-            StartCoroutine(InitialApply());
-        }
-
-        private IEnumerator InitialApply()
-        {
-            yield return new WaitForSeconds(1);
-            Apply();
         }
 
         /// <summary>
