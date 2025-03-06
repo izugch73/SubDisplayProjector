@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ namespace SubDisplayProjector
         }
 
         private static SubDisplayProjector _instance;
+
         public static SubDisplayProjector Instance
         {
             get
@@ -32,7 +34,7 @@ namespace SubDisplayProjector
          * If true, the safe area is considered when adjusting the display size.
          */
         [SerializeField] private bool isBasedSafeArea = false;
-        
+
         [SerializeField] private RawImage subDisplay;
         private RenderTexture _subDisplayRenderTexture;
 
@@ -41,6 +43,12 @@ namespace SubDisplayProjector
             DontDestroyOnLoad(this);
             InitializeRenderTexture();
 
+            StartCoroutine(InitialApply());
+        }
+
+        private IEnumerator InitialApply()
+        {
+            yield return new WaitForSeconds(1);
             Apply();
         }
 
