@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,32 +41,38 @@ namespace SubDisplayProjector
 
         private void Start()
         {
-            DontDestroyOnLoad(this);
-            InitializeRenderTexture();
+            UniTask.Void(async () =>
+            {
+                DontDestroyOnLoad(this);
+                InitializeRenderTexture();
+
+                await Apply(AdjustMode.WholeScreen, false);
+            });
         }
 
         /// <summary>
         /// Adjust the display size.
         /// </summary>
-        public void Apply()
+        public async UniTask Apply()
         {
-            var displaySize = GetAnotherScreenResolution();
+            var displaySize = await GetAnotherScreenResolution();
             AdjustDisplaySize(displaySize);
         }
 
         /// <summary>
         /// Adjust the display size based on the specified mode.
         /// </summary>
-        public void Apply(AdjustMode adjustMode, bool isBasedSafeArea)
+        public async UniTask Apply(AdjustMode adjustMode, bool isBasedSafeArea)
         {
             this.adjustMode = adjustMode;
             this.isBasedSafeArea = isBasedSafeArea;
-            var displaySize = GetAnotherScreenResolution();
+            var displaySize = await GetAnotherScreenResolution();
             AdjustDisplaySize(displaySize);
         }
 
-        private static Vector2 GetAnotherScreenResolution()
+        private static async UniTask<Vector2> GetAnotherScreenResolution()
         {
+            if (Display.displays.Length < 2) await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
             if (Display.displays.Length < 2) return new Vector2(1920, 1080);
 
             var display2 = Display.displays[1];
