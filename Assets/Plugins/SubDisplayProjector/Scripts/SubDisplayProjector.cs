@@ -132,6 +132,8 @@ namespace SubDisplayProjector
                     AdjustMode.WidthBasis => scaleWidth,
                     _ => Mathf.Min(scaleWidth, scaleHeight)
                 };
+                
+                subDisplay.rectTransform.anchoredPosition = Vector2.zero;
             }
 
             var newSizeDelta = new Vector2(baseWidth * scale, baseHeight * scale);
