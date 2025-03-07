@@ -5,7 +5,5 @@
   "unity": "2022.3",
   "description": "Sub Display Projector",
   "license": "MIT",
-  "dependencies": {
-    "com.cysharp.unitask": "2.5.10"
-  }
+  "dependencies": {}
 }
