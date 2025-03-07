@@ -202,5 +202,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   adjustMode: 0
-  isBasedSafeArea: 0
+  isBasedSafeArea: 1
   subDisplay: {fileID: 4412139510653225844}
