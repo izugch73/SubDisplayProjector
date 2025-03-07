@@ -1,5 +1,3 @@
-using System;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,45 +35,53 @@ namespace SubDisplayProjector
         [SerializeField] private bool isBasedSafeArea = false;
 
         [SerializeField] private RawImage subDisplay;
+
         private RenderTexture _subDisplayRenderTexture;
+        private int _connectedDisplaysCount = 1;
 
         private void Start()
         {
-            UniTask.Void(async () =>
-            {
-                DontDestroyOnLoad(this);
-                InitializeRenderTexture();
+            DontDestroyOnLoad(this);
+            InitializeRenderTexture();
 
-                await Apply(AdjustMode.WholeScreen, false);
-            });
+            if (Display.displays.Length > 1)
+            {
+                // Another display is already connected
+                Apply(AdjustMode.WholeScreen, true);
+            }
         }
 
-        /// <summary>
-        /// Adjust the display size.
-        /// </summary>
-        public async UniTask Apply()
+        private void Update()
         {
-            var displaySize = await GetAnotherScreenResolution();
-            AdjustDisplaySize(displaySize);
+            if (Display.displays.Length == _connectedDisplaysCount) return;
+            _connectedDisplaysCount = Display.displays.Length;
+
+            // Observe new display's connected
+            if (_connectedDisplaysCount > 1)
+            {
+                Display.displays[_connectedDisplaysCount - 1].Activate();
+                Apply(AdjustMode.WholeScreen, true);
+            }
         }
 
         /// <summary>
         /// Adjust the display size based on the specified mode.
         /// </summary>
-        public async UniTask Apply(AdjustMode adjustMode, bool isBasedSafeArea)
+        public void Apply(AdjustMode adjustMode, bool isBasedSafeArea)
         {
+            if (Display.displays.Length < 2) return;
+
             this.adjustMode = adjustMode;
             this.isBasedSafeArea = isBasedSafeArea;
-            var displaySize = await GetAnotherScreenResolution();
+            var displaySize = GetAnotherScreenResolution(Display.displays.Length - 1);
             AdjustDisplaySize(displaySize);
         }
 
-        private static async UniTask<Vector2> GetAnotherScreenResolution()
+        private static Vector2 GetAnotherScreenResolution(int displayId)
         {
-            if (Display.displays.Length < 2) await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
-            if (Display.displays.Length < 2) return new Vector2(1920, 1080);
+            if (Application.isEditor || Display.displays.Length < 2) return new Vector2(1920, 1080);
 
-            var display2 = Display.displays[1];
+            var display2 = Display.displays[displayId];
             var width = display2.systemWidth;
             var height = display2.systemHeight;
 
