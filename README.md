@@ -35,7 +35,6 @@ A Unity component to project the main display content onto a secondary display, 
 ### Runtime Behavior
 
 - You can reapply adjustments at runtime using:
-    - `Apply()`: Uses current inspector settings.
     - `Apply(AdjustMode adjustMode, bool isBasedSafeArea)`: Allows runtime updating of the adjustment mode and Safe Area flag.
 
 ### Example
